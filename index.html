@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexo Landing Page</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/scrollreveal"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexo - Smart Agriculture Investment</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
 </head>
-<body class="font-sans antialiased bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-800">
 
   <!-- Header -->
-  <header class="bg-gray-900 text-white p-4 shadow-lg sticky top-0 z-50">
+  <header class="bg-gray-900 text-white p-4 shadow-md">
     <nav class="container mx-auto flex justify-between items-center">
       <h1 class="text-2xl font-bold">Nexo</h1>
       <ul class="flex space-x-6">
@@ -22,34 +20,57 @@
     </nav>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-grow">
-    <!-- Hero Section -->
-    <section class="hero-section py-20 text-center bg-white">
-      <h2 class="text-4xl md:text-6xl font-bold mb-4">Welcome to Nexo</h2>
-      <p class="text-lg md:text-xl mb-6 max-w-xl mx-auto">Your solution to modern agricultural investment.</p>
-      <a href="about.html" class="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-6 rounded-full transition">Learn More</a>
-    </section>
+  <!-- Hero with Image -->
+  <section class="h-auto text-center">
+    <img src="images/farm-header.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
+    <div class="py-10 px-4">
+      <h2 class="text-4xl md:text-5xl font-bold mb-4">Invest in the Future of Agriculture</h2>
+      <p class="text-lg text-gray-700 max-w-2xl mx-auto mb-6">Nexo is pioneering smart, sustainable agriculture with innovative solutions and investment opportunities that benefit both the planet and your portfolio.</p>
+      <a href="#goals" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-300 transition">Learn More</a>
+    </div>
+  </section>
 
-    <!-- Goal Section -->
-    <section class="py-16 bg-gray-100 text-center">
-      <div class="container mx-auto px-4">
-        <h3 class="text-3xl font-bold mb-4">Our Goal</h3>
-        <p class="mb-8 text-gray-600">To innovate and lead in agricultural investments and sustainable farming.</p>
-        <img src="images/farm-goal.jpg" alt="Farm Goal" class="mx-auto rounded-lg shadow-md w-full max-w-3xl">
-      </div>
-    </section>
+  <!-- Project Goals -->
+  <section id="goals" class="bg-white py-16 text-center">
+    <div class="container mx-auto px-4">
+      <h3 class="text-3xl font-bold mb-6">Project Goals</h3>
+      <p class="max-w-3xl mx-auto text-gray-700">Our main goal is to revolutionize agriculture through modern technology and sustainable practices. We aim to reduce resource waste, improve crop yield, support local farmers, and promote environmental responsibility across every stage of agricultural production.</p>
+    </div>
+  </section>
 
-    <!-- Vision Section -->
-    <section class="py-16 bg-white text-center">
-      <div class="container mx-auto px-4">
-        <h3 class="text-3xl font-bold mb-4">Our Vision</h3>
-        <p class="text-gray-700 max-w-2xl mx-auto mb-6">To be a pioneer in modern agriculture, enhancing food security and profitability for all stakeholders.</p>
-        <img src="images/farm-vision.jpg" alt="Farm Vision" class="mx-auto rounded-lg shadow-md w-full max-w-3xl">
-      </div>
-    </section>
+  <!-- Products & Services -->
+  <section class="bg-gray-100 py-16 text-center">
+    <div class="container mx-auto px-4">
+      <h3 class="text-3xl font-bold mb-6">Products & Services</h3>
+      <ul class="max-w-4xl mx-auto text-center text-gray-700 space-y-4">
+        <li>• Smart irrigation systems</li>
+        <li>• Organic herbs and medicinal plants</li>
+        <li>• Dried and packaged agricultural products</li>
+        <li>• Agricultural investment portfolios</li>
+        <li>• On-demand agricultural consultations and training</li>
+        <li>• IoT-based monitoring and farm management tools</li>
+      </ul>
+    </div>
+  </section>
 
-    <!-- Contact Section -->
+  <!-- Target Audience -->
+  <section class="bg-white py-16 text-center">
+    <div class="container mx-auto px-4">
+      <h3 class="text-3xl font-bold mb-6">Target Audience</h3>
+      <p class="max-w-3xl mx-auto text-gray-700">Our services are designed for environmentally conscious investors, agricultural entrepreneurs, small to medium-sized farms, and institutions seeking to support green projects and benefit from sustainable returns.</p>
+    </div>
+  </section>
+
+  <!-- ROI Section -->
+  <section class="bg-gray-100 py-16 text-center">
+    <div class="container mx-auto px-4">
+      <h3 class="text-3xl font-bold mb-6">Return on Investment (ROI)</h3>
+      <p class="max-w-3xl mx-auto text-lg">Investing with Nexo offers competitive ROI through diversified agricultural projects. Our approach ensures minimized risk, long-term growth, and consistent profit driven by market demand, innovation, and environmental trends.</p>
+    </div>
+  </section>
+
+  <!-- Get in Touch -->
+     <!-- Contact Section -->
     <section class="py-16 bg-yellow-400 text-center">
       <div class="container mx-auto px-4">
         <h3 class="text-3xl font-bold mb-4">Get in Touch</h3>
@@ -65,19 +86,7 @@
   <!-- Footer -->
   <footer class="bg-gray-900 text-white text-center py-4">
     <p>&copy; 2025 Nexo. All rights reserved.</p>
-    <p class="text-sm mt-2">Privacy Policy | Egypt | Email: info@nexo.com</p>
   </footer>
-
-  <!-- Scroll Animation -->
-  <script>
-    ScrollReveal().reveal('section', {
-      delay: 100,
-      distance: '50px',
-      origin: 'bottom',
-      duration: 800,
-      reset: false
-    });
-  </script>
 
 </body>
 </html>
