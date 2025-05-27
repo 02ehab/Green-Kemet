@@ -30,31 +30,45 @@
         <li><a href="about.html" class="hover:text-yellow-400">About</a></li>
         <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
       </ul>
+      <div>
+        <button onclick="setLanguage('en')" class="text-sm hover:text-yellow-400 mx-2">EN</button>
+        <button onclick="setLanguage('ar')" class="text-sm hover:text-yellow-400 mx-2">AR</button>
+      </div>
     </nav>
   </header>
 
   <!-- Main Content -->
   <main>
-    <!-- Company Info -->
     <section class="py-16 text-center">
       <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold mb-4">About Nexo</h2>
-        <p class="text-gray-700 max-w-3xl mx-auto mb-6">
+        <h2 class="text-4xl font-bold mb-4" id="about-title">About Nexo</h2>
+        <p class="text-gray-700 max-w-3xl mx-auto mb-6" id="about-description">
           Nexo is an agricultural investment company committed to promoting sustainable farming practices, utilizing cutting-edge technologies, and empowering rural communities to thrive. Through strategic investments, we aim to transform the agricultural sector by introducing smart, eco-friendly solutions. Our mission is to provide innovative and profitable investment opportunities that support both environmental sustainability and economic growth. We believe in building a future where agriculture is not only productive but also responsible and inclusive, ensuring long-term value for investors and society alike.
         </p>
       </div>
     </section>
 
-    <!-- Optional Team Section (commented out) -->
-
-    <!-- Vision Image -->
-    <img src="images/farm-vision.jpg" alt="Farm Vision" class="mx-auto rounded-lg shadow-md w-full max-w-3xl mb-10"> 
+    <img src="images/hydroponic.jpg" alt="Farm Vision" class="mx-auto rounded-lg shadow-md w-full max-w-3xl mb-10">
   </main>
 
   <!-- Footer -->
   <footer class="bg-gray-900 text-white text-center py-4">
     <p>&copy; 2025 Nexo. All rights reserved.</p>
   </footer>
+
+  <!-- Language Switch Script -->
+  <script>
+    function setLanguage(lang) {
+      const isArabic = lang === 'ar';
+      document.documentElement.lang = lang;
+      document.body.dir = isArabic ? 'rtl' : 'ltr';
+
+      document.getElementById("about-title").textContent = isArabic ? "عن نيكسو" : "About Nexo";
+      document.getElementById("about-description").textContent = isArabic
+        ? "نيكسو هي شركة استثمار زراعي ملتزمة بتعزيز ممارسات الزراعة المستدامة، واستخدام أحدث التقنيات، وتمكين المجتمعات الريفية. من خلال استثمارات استراتيجية، نهدف إلى تحويل قطاع الزراعة من خلال حلول ذكية وصديقة للبيئة. مهمتنا هي تقديم فرص استثمارية مبتكرة ومربحة تدعم الاستدامة البيئية والنمو الاقتصادي. نؤمن ببناء مستقبل تكون فيه الزراعة منتجة ومسؤولة وشاملة، لضمان قيمة طويلة الأجل للمستثمرين والمجتمع."
+        : "Nexo is an agricultural investment company committed to promoting sustainable farming practices, utilizing cutting-edge technologies, and empowering rural communities to thrive. Through strategic investments, we aim to transform the agricultural sector by introducing smart, eco-friendly solutions. Our mission is to provide innovative and profitable investment opportunities that support both environmental sustainability and economic growth. We believe in building a future where agriculture is not only productive but also responsible and inclusive, ensuring long-term value for investors and society alike.";
+    }
+  </script>
 
 </body>
 </html>
