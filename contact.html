@@ -30,22 +30,25 @@
         <li><a href="about.html" class="hover:text-yellow-400">About</a></li>
         <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
       </ul>
+      <div>
+        <button onclick="setLanguage('en')" class="text-sm hover:text-yellow-400 mx-2">EN</button>
+        <button onclick="setLanguage('ar')" class="text-sm hover:text-yellow-400 mx-2">AR</button>
+      </div>
     </nav>
   </header>
 
   <!-- Main Content -->
   <main>
-    <!-- Contact Form -->
     <section class="py-16 text-center">
       <div class="container mx-auto px-4 max-w-xl">
-        <h2 class="text-4xl font-bold mb-4">Contact Us</h2>
-        <p class="text-gray-600 mb-8">Fill out the form and we will get back to you shortly.</p>
+        <h2 class="text-4xl font-bold mb-4" id="contact-title">Contact Us</h2>
+        <p class="text-gray-600 mb-8" id="contact-desc">Fill out the form and we will get back to you shortly.</p>
 
         <form action="https://formspree.io/f/xanogjjd" method="POST" class="bg-white p-6 rounded shadow-lg space-y-4">
-          <input type="text" name="name" placeholder="Your Name" required class="w-full p-3 border rounded">
-          <input type="email" name="email" placeholder="Your Email" required class="w-full p-3 border rounded">
-          <textarea name="message" rows="5" placeholder="Your Message" required class="w-full p-3 border rounded"></textarea>
-          <button type="submit" class="bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-800 transition">Send Message</button>
+          <input type="text" name="name" placeholder="Your Name" required class="w-full p-3 border rounded" id="name-placeholder">
+          <input type="email" name="email" placeholder="Your Email" required class="w-full p-3 border rounded" id="email-placeholder">
+          <textarea name="message" rows="5" placeholder="Your Message" required class="w-full p-3 border rounded" id="message-placeholder"></textarea>
+          <button type="submit" class="bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-800 transition" id="submit-btn">Send Message</button>
         </form>
       </div>
     </section>
@@ -55,6 +58,25 @@
   <footer class="bg-gray-900 text-white text-center py-4">
     <p>&copy; 2025 Nexo. All rights reserved.</p>
   </footer>
+
+  <!-- Language Script -->
+  <script>
+    function setLanguage(lang) {
+      const isArabic = lang === 'ar';
+      document.documentElement.lang = lang;
+      document.body.dir = isArabic ? 'rtl' : 'ltr';
+
+      document.getElementById("contact-title").textContent = isArabic ? "اتصل بنا" : "Contact Us";
+      document.getElementById("contact-desc").textContent = isArabic
+        ? "املأ النموذج وسنقوم بالرد عليك قريبًا."
+        : "Fill out the form and we will get back to you shortly.";
+
+      document.getElementById("name-placeholder").placeholder = isArabic ? "اسمك" : "Your Name";
+      document.getElementById("email-placeholder").placeholder = isArabic ? "بريدك الإلكتروني" : "Your Email";
+      document.getElementById("message-placeholder").placeholder = isArabic ? "رسالتك" : "Your Message";
+      document.getElementById("submit-btn").textContent = isArabic ? "إرسال الرسالة" : "Send Message";
+    }
+  </script>
 
 </body>
 </html>
