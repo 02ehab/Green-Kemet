@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -40,84 +41,115 @@
         subscribeBtn: "اشترك",
         footer: "© 2025 نيكسو. جميع الحقوق محفوظة."
       }
-    };function switchLang(lang) {
-  document.title = translations[lang].title;
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    const key = el.getAttribute("data-i18n");
-    if (translations[lang][key]) el.innerText = translations[lang][key];
-  });
-}
-
+    };
+    function switchLang(lang) {
+      document.title = translations[lang].title;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang][key]) el.innerText = translations[lang][key];
+      });
+    }
   </script>
-</head> 
-<body class="bg-gray-50 text-gray-800">  <!-- Header -->  <header class="bg-gray-900 text-white p-4 shadow-md">
-    <nav class="container mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Nexo</h1>
-      <ul class="flex space-x-6">
-        <li><a href="index.html" class="hover:text-yellow-400">Home</a></li>
-        <li><a href="about.html" class="hover:text-yellow-400">About</a></li>
-        <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
-        <li>
-          <button onclick="switchLang('ar')" class="text-sm hover:text-yellow-400 mx-2">AR</button>
-          <button onclick="switchLang('en')" class="text-yellow-400 font-semibold">EN</button>
-        </li>
-      </ul>
-    </nav>
-  </header>   <section class="h-auto text-center">
-    <div class="py-10 px-4">
-      <h2 class="text-4xl md:text-5xl font-bold mb-4" data-i18n="heroTitle">Invest in the Future of Agriculture</h2>
-      <p class="text-lg text-gray-700 max-w-2xl mx-auto mb-6" data-i18n="heroDesc">Nexo is pioneering smart, sustainable agriculture...</p>
-      <a href="#goals" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-300 transition" data-i18n="learnMore">Learn More</a>
-    </div>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-900 text-white p-4 shadow-md">
+      <nav class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Nexo</h1>
+        <ul class="flex space-x-6">
+          <li><a href="index.html" class="hover:text-yellow-400">Home</a></li>
+          <li><a href="about.html" class="hover:text-yellow-400">About</a></li>
+          <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
+          <li>
+            <button onclick="switchLang('ar')" class="text-sm hover:text-yellow-400 mx-2">AR</button>
+            <button onclick="switchLang('en')" class="text-yellow-400 font-semibold">EN</button>
+          </li>
+        </ul>
+      </nav>
+    </header>
 
-  <!-- Hero with Image -->  <section class="h-auto text-center">
-    <img src="images/farm-header.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
-  </section>  <!-- Project Goals -->  <section id="goals" class="bg-white py-16 text-center">
-    <div class="container mx-auto px-4">
-      <h3 class="text-3xl font-bold mb-6" data-i18n="projectGoals">Project Goals</h3>
-      <p class="max-w-3xl mx-auto text-gray-700" data-i18n="goalsText">Our main goal is to revolutionize agriculture...</p>
-    </div>
-    <!-- Here with Image -->  <section class="h-auto text-center">
-    <img src="images/farm-goal.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
-  </section>  <!-- Products & Services -->  <section class="bg-gray-100 py-16 text-center">
-    <div class="container mx-auto px-4">
-      <h3 class="text-3xl font-bold mb-6" data-i18n="productsServices">Products & Services</h3>
-      <ul class="max-w-4xl mx-auto text-center text-gray-700 space-y-4">
-        <li>• Smart irrigation systems</li>
-        <li>• Organic herbs and medicinal plants</li>
-        <li>• Dried and packaged agricultural products</li>
-        <li>• Agricultural investment portfolios</li>
-        <li>• On-demand agricultural consultations and training</li>
-        <li>• IoT-based monitoring and farm management tools</li>
-      </ul>
-    </div>
-    <!-- Hero with Image -->  <section class="h-auto text-center">
-    <img src="images/farm-products.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
-  </section>  <!-- Target Audience -->  <section class="bg-white py-16 text-center">
-    <div class="container mx-auto px-4">
-      <h3 class="text-3xl font-bold mb-6" data-i18n="targetAudience">Target Audience</h3>
-      <p class="max-w-3xl mx-auto text-gray-700" data-i18n="targetText">Our services are designed for environmentally conscious investors...</p>
-    </div>
-    <!-- Hero with Image -->  <section class="h-auto text-center">
-    <img src="images/farm-target.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
-  </section>  <!-- ROI Section -->  <section class="bg-gray-100 py-16 text-center">
-    <div class="container mx-auto px-4">
-      <h3 class="text-3xl font-bold mb-6" data-i18n="roi">Return on Investment (ROI)</h3>
-      <p class="max-w-3xl mx-auto text-lg" data-i18n="roiText">Investing with Nexo offers competitive ROI...</p>
-    </div>
-    <!-- Hero with Image -->  <section class="h-auto text-center">
-    <img src="images/farm-roi.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
-      
-  </section>  <!-- Contact Section -->  <section class="py-16 bg-yellow-400 text-center">
-    <div class="container mx-auto px-4">
-      <h3 class="text-3xl font-bold mb-4" data-i18n="getInTouch">Get in Touch</h3>
-      <p class="mb-6" data-i18n="subscribeText">Subscribe to our newsletter to stay updated.</p>
-      <form action="#" method="post" class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
-        <input type="email" name="email" placeholder="Enter your email" class="p-3 rounded w-72" required />
-        <button type="submit" class="bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-800 transition" data-i18n="subscribeBtn">Subscribe</button>
-      </form>
-    </div>
-  </section>  <!-- Footer -->  <footer class="bg-gray-900 text-white text-center py-4">
-    <p data-i18n="footer">© 2025 Nexo. All rights reserved.</p>
-  </footer></body>
+    <!-- Main Content -->
+    <main class="flex-grow">
+      <section class="h-auto text-center">
+        <div class="py-10 px-4">
+          <h2 class="text-4xl md:text-5xl font-bold mb-4" data-i18n="heroTitle">Invest in the Future of Agriculture</h2>
+          <p class="text-lg text-gray-700 max-w-2xl mx-auto mb-6" data-i18n="heroDesc">Nexo is pioneering smart, sustainable agriculture...</p>
+          <a href="#goals" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-300 transition" data-i18n="learnMore">Learn More</a>
+        </div>
+      </section>
+
+      <section class="h-auto text-center">
+        <img src="images/farm-header.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
+      </section>
+
+      <section id="goals" class="bg-white py-16 text-center">
+        <div class="container mx-auto px-4">
+          <h3 class="text-3xl font-bold mb-6" data-i18n="projectGoals">Project Goals</h3>
+          <p class="max-w-3xl mx-auto text-gray-700" data-i18n="goalsText">Our main goal is to revolutionize agriculture...</p>
+        </div>
+      </section>
+
+      <section class="h-auto text-center">
+        <img src="images/farm-goal.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
+      </section>
+
+      <section class="bg-gray-100 py-16 text-center">
+        <div class="container mx-auto px-4">
+          <h3 class="text-3xl font-bold mb-6" data-i18n="productsServices">Products & Services</h3>
+          <ul class="max-w-4xl mx-auto text-center text-gray-700 space-y-4">
+            <li>• Smart irrigation systems</li>
+            <li>• Organic herbs and medicinal plants</li>
+            <li>• Dried and packaged agricultural products</li>
+            <li>• Agricultural investment portfolios</li>
+            <li>• On-demand agricultural consultations and training</li>
+            <li>• IoT-based monitoring and farm management tools</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="h-auto text-center">
+        <img src="images/farm-products.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
+      </section>
+
+      <section class="bg-white py-16 text-center">
+        <div class="container mx-auto px-4">
+          <h3 class="text-3xl font-bold mb-6" data-i18n="targetAudience">Target Audience</h3>
+          <p class="max-w-3xl mx-auto text-gray-700" data-i18n="targetText">Our services are designed for environmentally conscious investors...</p>
+        </div>
+      </section>
+
+      <section class="h-auto text-center">
+        <img src="images/farm-target.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
+      </section>
+
+      <section class="bg-gray-100 py-16 text-center">
+        <div class="container mx-auto px-4">
+          <h3 class="text-3xl font-bold mb-6" data-i18n="roi">Return on Investment (ROI)</h3>
+          <p class="max-w-3xl mx-auto text-lg" data-i18n="roiText">Investing with Nexo offers competitive ROI...</p>
+        </div>
+      </section>
+
+      <section class="h-auto text-center">
+        <img src="images/farm-roi.jpg" alt="Smart Farming" class="w-full h-96 object-cover">
+      </section>
+
+      <section class="py-16 bg-yellow-400 text-center">
+        <div class="container mx-auto px-4">
+          <h3 class="text-3xl font-bold mb-4" data-i18n="getInTouch">Get in Touch</h3>
+          <p class="mb-6" data-i18n="subscribeText">Subscribe to our newsletter to stay updated.</p>
+          <form action="#" method="post" class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
+            <input type="email" name="email" placeholder="Enter your email" class="p-3 rounded w-72" required />
+            <button type="submit" class="bg-gray-900 text-white px-6 py-3 rounded hover:bg-gray-800 transition" data-i18n="subscribeBtn">Subscribe</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white text-center py-4">
+      <p data-i18n="footer">© 2025 Nexo. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
 </html>
