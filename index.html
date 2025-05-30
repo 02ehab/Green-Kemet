@@ -53,21 +53,21 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
   <div class="min-h-screen flex flex-col">
-    <!-- Header -->
-    <header class="bg-gray-900 text-white p-4 shadow-md">
-      <nav class="container mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Green Kemet</h1>
-        <ul class="flex space-x-6">
-          <li><a href="index.html" class="hover:text-yellow-400">Home</a></li>
-          <li><a href="about.html" class="hover:text-yellow-400">About</a></li>
-          <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
-          <li>
-            <button onclick="switchLang('ar')" class="text-sm hover:text-yellow-400 mx-2">AR</button>
-            <button onclick="switchLang('en')" class="text-yellow-400 font-semibold">EN</button>
-          </li>
-        </ul>
-      </nav>
-    </header>
+     <!-- Header -->
+  <header class="bg-gray-900 text-white p-4 shadow-md">
+    <nav class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Green Kemet</h1>
+      <ul class="flex space-x-6">
+        <li><a href="index.html" class="hover:text-yellow-400">Home</a></li>
+        <li><a href="about.html" class="hover:text-yellow-400">About</a></li>
+        <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
+      </ul>
+      <div>
+        <button onclick="setLanguage('en')" class="text-sm hover:text-yellow-400 mx-2">EN</button>
+        <button onclick="setLanguage('ar')" class="text-sm hover:text-yellow-400 mx-2">AR</button>
+      </div>
+    </nav>
+  </header>
 
     <!-- Main Content -->
     <main class="flex-grow">
