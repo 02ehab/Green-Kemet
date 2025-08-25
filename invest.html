@@ -1,0 +1,384 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة قرارات الاستثمار – ثاندر</title>
+  <style>
+    :root{
+      --bg:#0f172a;         /* slate-900 */
+      --card:#111827;       /* gray-900 */
+      --muted:#94a3b8;      /* slate-400 */
+      --text:#e5e7eb;       /* gray-200 */
+      --accent:#22c55e;     /* green-500 */
+      --warn:#f59e0b;       /* amber-500 */
+      --danger:#ef4444;     /* red-500 */
+      --primary:#38bdf8;    /* sky-400 */
+      --chip:#1f2937;       /* gray-800 */
+      --border:#1f2937;     /* gray-800 */
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#0b1220,#0f172a);color:var(--text);font-family:"Cairo","Segoe UI",system-ui,Arial,sans-serif}
+    header{position:sticky;top:0;backdrop-filter:blur(8px);background:rgba(15,23,42,.7);border-bottom:1px solid var(--border);z-index:5}
+    .container{max-width:1100px;margin:auto;padding:18px}
+    h1{margin:0 0 6px 0;font-weight:800;font-size:clamp(20px,3vw,28px)}
+    .sub{color:var(--muted);font-size:14px}
+    .grid{display:grid;gap:14px}
+    .grid-2{grid-template-columns:1.2fr .8fr}
+    @media(max-width:920px){.grid-2{grid-template-columns:1fr}}
+    .card{background:radial-gradient(1200px 300px at 100% -20%,rgba(56,189,248,.09),transparent 40%),
+                 radial-gradient(900px 300px at -10% -50%,rgba(34,197,94,.07),transparent 40%),
+                 var(--card);
+          border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input[type="text"],input[type="number"]{width:100%;padding:12px 12px;border:1px solid var(--border);border-radius:12px;background:#0b1220;color:var(--text);outline:none}
+    input::placeholder{color:#6b7280}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn{cursor:pointer;border:0;border-radius:12px;padding:12px 14px;font-weight:700}
+    .btn-primary{background:var(--primary);color:#03111a}
+    .btn-ghost{background:#0b1220;border:1px solid var(--border);color:var(--text)}
+    .btn-danger{background:var(--danger)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{background:var(--chip);border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+    table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    thead th{font-size:12px;color:var(--muted);font-weight:600;text-align:right}
+    tbody td{background:#0b1220;border:1px solid var(--border);padding:12px;vertical-align:middle}
+    tbody tr td:first-child{border-radius:12px 0 0 12px}
+    tbody tr td:last-child{border-radius:0 12px 12px 0}
+    .badge{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;display:inline-block}
+    .buy{background:rgba(34,197,94,.15);color:#5df28e;border:1px solid rgba(34,197,94,.35)}
+    .hold{background:rgba(245,158,11,.15);color:#ffd37a;border:1px solid rgba(245,158,11,.35)}
+    .avoid{background:rgba(239,68,68,.15);color:#ff9b9b;border:1px solid rgba(239,68,68,.35)}
+    .risk-low{color:#5df28e}
+    .risk-med{color:#ffd37a}
+    .risk-high{color:#ff9b9b}
+    .muted{color:var(--muted)}
+    .sep{height:1px;background:var(--border);margin:12px 0}
+    .footer{color:#7a889e;font-size:12px;margin-top:10px}
+    .kbd{border:1px solid var(--border);padding:2px 6px;border-radius:6px;background:#0b1220;color:#9fb3c8}
+    .danger-text{color:#ffb4b4}
+    .success-text{color:#a9ffcf}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>لوحة قرارات الاستثمار</h1>
+      <div class="sub">أدخل أسعار السهم/الصندوق (خلال ٥ سنوات، سنة، ٦ أشهر، والحالي) – هنحسب الزخم، العائد المركب، مستوى المخاطرة، ونقترح قرار <span class="kbd">شراء/احتفاظ/تجنب</span>.</div>
+    </div>
+  </header>  <main class="container grid grid-2" style="margin-top:14px">
+    <!-- Form Card -->
+    <section class="card">
+      <h2 style="margin:0 0 10px 0">إضافة أصل</h2>
+      <div class="chips" style="margin-bottom:12px">
+        <span class="chip">مثال: فوري، إي إف جي، EFG Hermes، SPY، MSFT</span>
+        <span class="chip">العملة غير مهمة – الأرقام فقط</span>
+      </div>
+      <div class="row">
+        <div>
+          <label>اسم الشركة / الصندوق</label>
+          <input id="name" type="text" placeholder="مثال: MSFT أو فوري" />
+        </div>
+        <div>
+          <label>سعر اليوم</label>
+          <input id="p_now" type="number" min="0" step="0.0001" placeholder="0.00" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div>
+          <label>سعر منذ ٦ أشهر</label>
+          <input id="p_6m" type="number" min="0" step="0.0001" placeholder="0.00" />
+        </div>
+        <div>
+          <label>سعر منذ سنة</label>
+          <input id="p_1y" type="number" min="0" step="0.0001" placeholder="0.00" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div>
+          <label>سعر منذ ٥ سنوات</label>
+          <input id="p_5y" type="number" min="0" step="0.0001" placeholder="0.00" />
+        </div>
+        <div>
+          <label>ملاحظات (اختياري)</label>
+          <input id="notes" type="text" placeholder="قطاع، سبب الاهتمام…" />
+        </div>
+      </div>
+      <div class="actions" style="margin-top:12px">
+        <button class="btn btn-primary" id="addBtn">إضافة / تحديث</button>
+        <button class="btn btn-ghost" id="resetForm">تفريغ الحقول</button>
+      </div>
+      <div class="footer">تلميح: بعد الإضافة تقدر تعدل أو تحذف من الجدول. بنحفظ تلقائيًا في <span class="kbd">localStorage</span>.</div>
+    </section><!-- Insights Card -->
+<section class="card">
+  <h2 style="margin:0 0 10px 0">منهجية القرار</h2>
+  <div class="chips">
+    <span class="chip">CAGR ٥ سنين</span>
+    <span class="chip">عائد سنة</span>
+    <span class="chip">عائد ٦ أشهر</span>
+    <span class="chip">درجة المخاطرة = تذبذب العوائد الثلاثة</span>
+  </div>
+  <div class="sep"></div>
+  <ul style="margin:0;padding-right:18px;line-height:1.9">
+    <li>نحسب <strong>CAGR خمس سنوات</strong> = <code>(سعر اليوم / سعر ٥ سنين)^(1/5) − 1</code>.</li>
+    <li>نحسب <strong>عائد سنة</strong> و<strong>عائد ٦ أشهر</strong>.</li>
+    <li>سكور الزخم = 20% من CAGR ٥ سنين + 30% من عائد سنة + 50% من عائد ٦ أشهر.</li>
+    <li>المخاطرة = الانحراف المعياري للعوائد الثلاثة (كل ما زاد → مخاطرة أعلى).</li>
+    <li>القرار:
+      <ul style="margin-top:6px;line-height:1.7">
+        <li><span class="badge buy">شراء</span> إذا كان سكور الزخم ≥ 10% وكل العوائد إيجابية.</li>
+        <li><span class="badge hold">احتفاظ</span> إذا كان 0% ≤ سكور الزخم &lt; 10% أو النتائج متباينة.</li>
+        <li><span class="badge avoid">تجنب / راقِب</span> إذا كان سكور الزخم سالبًا.</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="sep"></div>
+  <div class="muted">⚠️ تنبيه: هذه أداة مساعدة تعليمية وليست نصيحة استثمارية. اعتمد على أبحاثك، وتذكر تنويع المحفظة.</div>
+</section>
+
+<!-- Table Card -->
+<section class="card" style="grid-column:1/-1">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
+    <h2 style="margin:0">قائمة الأصول</h2>
+    <div class="actions">
+      <button class="btn btn-ghost" id="exportBtn">تصدير JSON</button>
+      <button class="btn btn-ghost" id="importBtn">استيراد JSON</button>
+      <button class="btn btn-danger" id="wipeBtn">مسح الكل</button>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>الاسم</th>
+        <th>٦ أشهر</th>
+        <th>سنة</th>
+        <th>٥ سنين (CAGR)</th>
+        <th>سكور الزخم</th>
+        <th>المخاطرة</th>
+        <th>القرار</th>
+        <th>ملاحظات</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="footer">اختصار: دوبل كليك على الصف لبدء التعديل السريع.</div>
+</section>
+
+  </main>  <template id="row-template">
+    <tr>
+      <td class="nm"></td>
+      <td class="r6"></td>
+      <td class="r1"></td>
+      <td class="r5"></td>
+      <td class="mom"></td>
+      <td class="risk"></td>
+      <td class="rec"></td>
+      <td class="nt"></td>
+      <td class="ops"></td>
+    </tr>
+  </template>  <script>
+    // ===== Utilities =====
+    const $ = (q, el=document) => el.querySelector(q);
+    const fmtPct = (x) => (isFinite(x)? (x*100).toFixed(1) : "-") + "%";
+
+    function calcMetrics(p5y, p1y, p6m, pnow){
+      const r6m = (pnow / p6m) - 1;
+      const r1y = (pnow / p1y) - 1;
+      const cagr5 = Math.pow(pnow / p5y, 1/5) - 1;
+      const momentum = 0.2*cagr5 + 0.3*r1y + 0.5*r6m;
+      // risk proxy = stddev of [r6m, r1y, cagr5]
+      const arr = [r6m, r1y, cagr5];
+      const mean = (arr[0]+arr[1]+arr[2])/3;
+      const variance = (arr.reduce((s,v)=>s+Math.pow(v-mean,2),0))/3;
+      const risk = Math.sqrt(variance);
+      // decision
+      let decision = 'hold';
+      if(momentum >= 0.10 && r6m>0 && r1y>0 && cagr5>0) decision = 'buy';
+      else if(momentum < 0) decision = 'avoid';
+      // risk level
+      let riskLevel = 'منخفض';
+      if(risk >= 0.25) riskLevel = 'عالي';
+      else if(risk >= 0.12) riskLevel = 'متوسط';
+      return { r6m, r1y, cagr5, momentum, risk, riskLevel, decision };
+    }
+
+    function badgeDecision(dec){
+      if(dec==='buy') return `<span class="badge buy">شراء</span>`;
+      if(dec==='avoid') return `<span class="badge avoid">تجنب</span>`;
+      return `<span class="badge hold">احتفاظ</span>`;
+    }
+
+    function riskColor(level){
+      if(level==='عالي') return 'risk-high';
+      if(level==='متوسط') return 'risk-med';
+      return 'risk-low';
+    }
+
+    // ===== State (localStorage) =====
+    const KEY = 'invest-dashboard-v1';
+    let state = JSON.parse(localStorage.getItem(KEY) || '[]');
+    let editingId = null; // when editing from the form
+
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+    function upsert(item){
+      const idx = state.findIndex(x => x.id === item.id);
+      if(idx>-1) state[idx] = item; else state.push(item);
+      save();
+      render();
+    }
+
+    function remove(id){
+      state = state.filter(x => x.id!==id);
+      save();
+      render();
+    }
+
+    // ===== Render Table =====
+    function render(){
+      const tbody = $('#rows');
+      tbody.innerHTML = '';
+      state.forEach(row => {
+        const t = document.importNode($('#row-template').content, true);
+        const cells = {
+          nm: $('.nm', t), r6: $('.r6', t), r1: $('.r1', t), r5: $('.r5', t),
+          mom: $('.mom', t), risk: $('.risk', t), rec: $('.rec', t), nt: $('.nt', t), ops: $('.ops', t)
+        };
+        const m = calcMetrics(row.p5y, row.p1y, row.p6m, row.pnow);
+        cells.nm.textContent = row.name;
+        cells.r6.textContent = fmtPct(m.r6m);
+        cells.r1.textContent = fmtPct(m.r1y);
+        cells.r5.textContent = fmtPct(m.cagr5);
+        cells.mom.innerHTML = `<strong>${fmtPct(m.momentum)}</strong>`;
+        cells.risk.innerHTML = `<span class="${riskColor(m.riskLevel)}">${m.riskLevel}</span>`;
+        cells.rec.innerHTML = badgeDecision(m.decision);
+        cells.nt.textContent = row.notes || '';
+        // actions
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn btn-ghost';
+        editBtn.textContent = 'تعديل';
+        editBtn.onclick = () => startEdit(row.id);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-danger';
+        delBtn.textContent = 'حذف';
+        delBtn.onclick = () => {
+          if(confirm('هل أنت متأكد من حذف هذا الأصل؟')) remove(row.id);
+        };
+        cells.ops.append(editBtn, delBtn);
+
+        // double-click to quick-edit
+        t.querySelector('tr').ondblclick = () => startEdit(row.id);
+
+        tbody.appendChild(t);
+      });
+    }
+
+    // ===== Form Handling =====
+    function resetForm(){
+      editingId = null;
+      $('#name').value = '';
+      $('#p_now').value = '';
+      $('#p_6m').value = '';
+      $('#p_1y').value = '';
+      $('#p_5y').value = '';
+      $('#notes').value = '';
+      $('#addBtn').textContent = 'إضافة / تحديث';
+    }
+
+    function startEdit(id){
+      const row = state.find(x=>x.id===id);
+      if(!row) return;
+      editingId = id;
+      $('#name').value = row.name;
+      $('#p_now').value = row.pnow;
+      $('#p_6m').value = row.p6m;
+      $('#p_1y').value = row.p1y;
+      $('#p_5y').value = row.p5y;
+      $('#notes').value = row.notes || '';
+      $('#addBtn').textContent = 'تحديث';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function onSubmit(){
+      const name = $('#name').value.trim();
+      const pnow = parseFloat($('#p_now').value);
+      const p6m = parseFloat($('#p_6m').value);
+      const p1y = parseFloat($('#p_1y').value);
+      const p5y = parseFloat($('#p_5y').value);
+      const notes = $('#notes').value.trim();
+
+      if(!name){ alert('من فضلك أدخل الاسم'); return; }
+      const fields = [pnow,p6m,p1y,p5y];
+      if(fields.some(x=>!isFinite(x) || x<=0)){
+        alert('تأكد من إدخال أسعار صحيحة أكبر من صفر لجميع الفترات');
+        return;
+      }
+
+      const item = { id: editingId || crypto.randomUUID(), name, pnow, p6m, p1y, p5y, notes, ts: Date.now() };
+      upsert(item);
+      resetForm();
+    }
+
+    // ===== Import/Export =====
+    function exportJSON(){
+      const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'invest-dashboard.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    function importJSON(){
+      const inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = 'application/json';
+      inp.onchange = () => {
+        const file = inp.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try{
+            const data = JSON.parse(reader.result);
+            if(!Array.isArray(data)) throw new Error('bad');
+            // minimal schema check
+            state = data.filter(x=>x && x.id && x.name && isFinite(x.pnow) && isFinite(x.p6m) && isFinite(x.p1y) && isFinite(x.p5y));
+            save();
+            render();
+            alert('تم الاستيراد بنجاح');
+          }catch(e){ alert('ملف غير صالح'); }
+        };
+        reader.readAsText(file);
+      };
+      inp.click();
+    }
+
+    function wipeAll(){
+      if(confirm('هيتم مسح كل البيانات من هذا الجهاز فقط. متأكد؟')){
+        state = [];
+        save();
+        render();
+      }
+    }
+
+    // ===== Setup =====
+    $('#addBtn').onclick = onSubmit;
+    $('#resetForm').onclick = resetForm;
+    $('#exportBtn').onclick = exportJSON;
+    $('#importBtn').onclick = importJSON;
+    $('#wipeBtn').onclick = wipeAll;
+
+    // Prefill demo once for empty states
+    if(state.length===0){
+      const demo = [
+        {name:'MSFT', p5y:135, p1y:410, p6m:440, pnow:450, notes:'تقنية كبرى'},
+        {name:'SPY', p5y:290, p1y:500, p6m:520, pnow:530, notes:'صندوق S&P 500'},
+        {name:'فوري', p5y:15,  p1y:6,   p6m:7.5, pnow:7.2, notes:'Fintech مصر'}
+      ];
+      demo.forEach(d=> upsert({ id: crypto.randomUUID(), ...d, ts: Date.now() }));
+    } else {
+      render();
+    }
+  </script></body>
+</html>
