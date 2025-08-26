@@ -219,20 +219,35 @@ tbody tr:hover td{background:var(--chip)}
     </section>
 
     <!-- Table Card -->
-    <section class="card" style="overflow-x:auto">
-      <h2 style="margin:0 0 12px 0">Added Assets</h2>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th><th>Current Price</th><th>6 Months</th><th>1 Year</th><th>5 Years</th><th>Notes</th><th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="assetTableBody">
-            <tr class="empty-state"><td colspan="7">No assets yet.</td></tr>
-          </tbody>
-        </table>
+    <section class="card" style="grid-column:1/-1">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
+        <h2 style="margin:0">قائمة الأصول</h2>
+        <div class="actions">
+          <button class="btn btn-ghost" id="exportBtn">تصدير JSON</button>
+          <button class="btn btn-ghost" id="importBtn">استيراد JSON</button>
+          <button class="btn btn-danger" id="wipeBtn">مسح الكل</button>
+        </div>
       </div>
+      <table>
+        <thead>
+          <tr>
+            <th>الاسم</th><th>٦ أشهر</th><th>سنة</th><th>٥ سنين (CAGR)</th>
+            <th>الزخم</th><th>المخاطرة</th><th>القرار</th><th>ملاحظات</th><th>إجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="footer">اختصار: دوبل كليك على الصف لبدء التعديل السريع.</div>
+    </section>
+  </main>
+
+  <template id="row-template">
+    <tr>
+      <td class="nm"></td><td class="r6"></td><td class="r1"></td>
+      <td class="r5"></td><td class="mom"></td><td class="risk"></td>
+      <td class="rec"></td><td class="nt"></td><td class="ops"></td>
+    </tr>
+  </template>
     </section>
   </main>
 
@@ -241,107 +256,187 @@ tbody tr:hover td{background:var(--chip)}
   </footer>
 
   <script>
-    let state = [];
+  // ================== State ==================
+  const STORAGE_KEY = 'kemetx_state';
+  let state = [];
+  let editingId = null;
 
-    function safeUUID() {
-      return 'xxxx-xxxx-xxxx'.replace(/[x]/g,()=>Math.floor(Math.random()*16).toString(16));
-    }
-
-    function save() { localStorage.setItem('kemetx_state', JSON.stringify(state)); }
-    function loadState() { const stored = localStorage.getItem('kemetx_state'); if(stored) state = JSON.parse(stored); }
-
-    function render() {
-  const tbody = document.getElementById('assetTableBody');
-  tbody.innerHTML = '';
-  if(state.length === 0){
-    tbody.innerHTML = '<tr class="empty-state"><td colspan="7">No assets yet.</td></tr>';
-    return;
+  function safeUUID() {
+    return 'xxxx-xxxx-xxxx'.replace(/[x]/g,()=>Math.floor(Math.random()*16).toString(16));
   }
 
-  state.forEach(a => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${a.name}</td>
-      <td>${a.pnow}</td>
-      <td>${a.p6m || '-'}</td>
-      <td>${a.p1y || '-'}</td>
-      <td>${a.p5y || '-'}</td>
-      <td>${a.notes || '-'}</td>
-      <td class="actions">
-        <button class="btn btn-primary" onclick="editAsset('${a.id}')">Edit</button>
-        <button class="btn btn-danger" onclick="removeAsset('${a.id}')">Delete</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+  function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  function loadState() { 
+    const stored = localStorage.getItem(STORAGE_KEY); 
+    if(stored) state = JSON.parse(stored); 
+  }
 
-let editingId = null;
+  // ================== Render ==================
+  function render() {
+    const tbody = document.getElementById('rows');
+    tbody.innerHTML = '';
+    if(state.length === 0){
+      tbody.innerHTML = '<tr><td colspan="9" class="empty-state">لا توجد أصول مضافة بعد</td></tr>';
+      return;
+    }
 
-function editAsset(id) {
-  const asset = state.find(a => a.id === id);
-  if(!asset) return;
+    state.forEach(a => {
+      const tr = document.createElement('tr');
 
-  // Fill form with existing values
-  document.getElementById('name').value = asset.name;
-  document.getElementById('pnow').value = asset.pnow;
-  document.getElementById('p6m').value = asset.p6m || '';
-  document.getElementById('p1y').value = asset.p1y || '';
-  document.getElementById('p5y').value = asset.p5y || '';
-  document.getElementById('notes').value = asset.notes || '';
-
-  editingId = id;
-}
-
-
-    function removeAsset(id){ state = state.filter(a=>a.id!==id); save(); render(); }
-
-    function init(){
-      loadState();
-      if(state.length===0){
-        const demo=[
-          {name:'MSFT',p5y:135,p1y:410,p6m:440,pnow:450,notes:'Major Tech - Microsoft'},
-          {name:'SPY',p5y:290,p1y:500,p6m:520,pnow:530,notes:'S&P 500 Fund'},
-          {name:'FWRY',p5y:15,p1y:6,p6m:7.5,pnow:7.2,notes:'Fintech Egypt'}
-        ];
-        demo.forEach(d=>{ state.push({...d,id:safeUUID(),ts:Date.now()}); });
-        save();
+      // حساب المؤشرات
+      let metrics = { r6m:null,r1y:null,cagr5:null,momentum:null,risk:null,riskLevel:'-',decision:'-' };
+      if(a.p5y && a.p1y && a.p6m && a.pnow){
+        metrics = calcMetrics(a.p5y,a.p1y,a.p6m,a.pnow);
       }
+
+      tr.innerHTML = `
+        <td class="nm">${a.name}</td>
+        <td class="r6">${metrics.r6m ? (metrics.r6m*100).toFixed(1)+'%' : '-'}</td>
+        <td class="r1">${metrics.r1y ? (metrics.r1y*100).toFixed(1)+'%' : '-'}</td>
+        <td class="r5">${metrics.cagr5 ? (metrics.cagr5*100).toFixed(1)+'%' : '-'}</td>
+        <td class="mom">${metrics.momentum ? (metrics.momentum*100).toFixed(1)+'%' : '-'}</td>
+        <td class="risk ${riskColor(metrics.riskLevel)}">${metrics.riskLevel}</td>
+        <td class="rec">${badgeDecision(metrics.decision)}</td>
+        <td class="nt">${a.notes || '-'}</td>
+        <td class="ops"></td>
+      `;
+
+      // أزرار الإجراءات
+      const ops = tr.querySelector('.ops');
+      const editBtn = document.createElement('button');
+      editBtn.className = 'btn btn-ghost'; editBtn.textContent = 'تعديل';
+      editBtn.onclick = () => editAsset(a.id);
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'btn btn-danger'; delBtn.textContent = 'حذف';
+      delBtn.onclick = () => { if(confirm('هل أنت متأكد من حذف هذا الأصل؟')) removeAsset(a.id); };
+
+      ops.append(editBtn, delBtn);
+
+      // تعديل سريع بالدوبل كليك
+      tr.ondblclick = () => editAsset(a.id);
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ================== CRUD ==================
+  function editAsset(id) {
+    const asset = state.find(a => a.id === id);
+    if(!asset) return;
+
+    document.getElementById('name').value = asset.name;
+    document.getElementById('pnow').value = asset.pnow;
+    document.getElementById('p6m').value = asset.p6m || '';
+    document.getElementById('p1y').value = asset.p1y || '';
+    document.getElementById('p5y').value = asset.p5y || '';
+    document.getElementById('notes').value = asset.notes || '';
+
+    editingId = id;
+  }
+
+  function removeAsset(id){ 
+    state = state.filter(a=>a.id!==id); 
+    save(); render(); 
+  }
+
+  // ================== Metrics ==================
+  function calcMetrics(p5y, p1y, p6m, pnow){
+    const r6m = (pnow / p6m) - 1;
+    const r1y = (pnow / p1y) - 1;
+    const cagr5 = Math.pow(pnow / p5y, 1/5) - 1;
+    const momentum = 0.2*cagr5 + 0.3*r1y + 0.5*r6m;
+    const arr = [r6m, r1y, cagr5];
+    const mean = arr.reduce((a,b)=>a+b,0)/3;
+    const variance = arr.reduce((s,v)=>s+Math.pow(v-mean,2),0)/3;
+    const risk = Math.sqrt(variance);
+    let decision = 'hold';
+    if(momentum >= 0.10 && r6m>0 && r1y>0 && cagr5>0) decision = 'buy';
+    else if(momentum < 0) decision = 'avoid';
+    let riskLevel = 'منخفض';
+    if(risk >= 0.25) riskLevel = 'عالي';
+    else if(risk >= 0.12) riskLevel = 'متوسط';
+    return { r6m, r1y, cagr5, momentum, risk, riskLevel, decision };
+  }
+
+  function badgeDecision(dec){
+    if(dec==='buy') return `<span class="badge buy">شراء</span>`;
+    if(dec==='avoid') return `<span class="badge avoid">تجنب</span>`;
+    return `<span class="badge hold">احتفاظ</span>`;
+  }
+  function riskColor(level){
+    if(level==='عالي') return 'risk-high';
+    if(level==='متوسط') return 'risk-med';
+    return 'risk-low';
+  }
+
+  // ================== Init ==================
+  function init(){
+    loadState();
+    if(state.length===0){
+      const demo=[
+        {name:'MSFT',p5y:135,p1y:410,p6m:440,pnow:450,notes:'Major Tech - Microsoft'},
+        {name:'SPY',p5y:290,p1y:500,p6m:520,pnow:530,notes:'S&P 500 Fund'},
+        {name:'FWRY',p5y:15,p1y:6,p6m:7.5,pnow:7.2,notes:'Fintech Egypt'}
+      ];
+      demo.forEach(d=>{ state.push({...d,id:safeUUID(),ts:Date.now()}); });
+      save();
+    }
+    render();
+  }
+
+  // ================== Form ==================
+  document.getElementById('assetForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('name');
+    const pnow = document.getElementById('pnow');
+    const p6m = document.getElementById('p6m');
+    const p1y = document.getElementById('p1y');
+    const p5y = document.getElementById('p5y');
+    const notes = document.getElementById('notes');
+
+    if(editingId) {
+      const asset = state.find(a => a.id === editingId);
+      if(asset){
+        asset.name = name.value;
+        asset.pnow = +pnow.value;
+        asset.p6m = +p6m.value || null;
+        asset.p1y = +p1y.value || null;
+        asset.p5y = +p5y.value || null;
+        asset.notes = notes.value || '';
+      }
+      editingId = null;
+    } else {
+      const a = {
+        id: safeUUID(),
+        name: name.value,
+        pnow: +pnow.value,
+        p6m: +p6m.value || null,
+        p1y: +p1y.value || null,
+        p5y: +p5y.value || null,
+        notes: notes.value || '',
+        ts: Date.now()
+      };
+      state.push(a);
+    }
+
+    save();
+    render();
+    this.reset();
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', ()=>{
+    document.getElementById('assetForm').reset();
+    editingId = null;
+  });
+
+  document.getElementById('wipeBtn').addEventListener('click', ()=>{
+    if(confirm('هل أنت متأكد من مسح كل الأصول؟')){
+      state = [];
+      save();
       render();
     }
-
-    document.getElementById('assetForm').addEventListener('submit', function(e){
-  e.preventDefault();
-
-  if(editingId) {
-    // Update existing asset
-    const asset = state.find(a => a.id === editingId);
-    asset.name = name.value;
-    asset.pnow = +pnow.value;
-    asset.p6m = +p6m.value || null;
-    asset.p1y = +p1y.value || null;
-    asset.p5y = +p5y.value || null;
-    asset.notes = notes.value || '';
-    editingId = null; // reset edit state
-  } else {
-    // Add new asset
-    const a = {
-      id: safeUUID(),
-      name: name.value,
-      pnow: +pnow.value,
-      p6m: +p6m.value || null,
-      p1y: +p1y.value || null,
-      p5y: +p5y.value || null,
-      notes: notes.value || '',
-      ts: Date.now()
-    };
-    state.push(a);
-  }
-
-  save();
-  render();
-  this.reset();
-});
+  });
 
 
     // Theme toggle
