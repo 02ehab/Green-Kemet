@@ -1,205 +1,291 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>لوحة قرارات الاستثمار – ثاندر</title>
+  <title>لوحة قرارات الاستثمار – KemetX</title>
   <style>
-    :root{
-      --bg:#0f172a;         /* slate-900 */
-      --card:#111827;       /* gray-900 */
-      --muted:#94a3b8;      /* slate-400 */
-      --text:#e5e7eb;       /* gray-200 */
-      --accent:#22c55e;     /* green-500 */
-      --warn:#f59e0b;       /* amber-500 */
-      --danger:#ef4444;     /* red-500 */
-      --primary:#38bdf8;    /* sky-400 */
-      --chip:#1f2937;       /* gray-800 */
-      --border:#1f2937;     /* gray-800 */
-    }
     *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,#0b1220,#0f172a);color:var(--text);font-family:"Cairo","Segoe UI",system-ui,Arial,sans-serif}
-    header{position:sticky;top:0;backdrop-filter:blur(8px);background:rgba(15,23,42,.7);border-bottom:1px solid var(--border);z-index:5}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:"Cairo","Segoe UI",system-ui,Arial,sans-serif;transition:background .3s,color .3s}
+
+    :root{
+      --bg:#0f172a;
+      --card:#111827;
+      --muted:#94a3b8;
+      --text:#e5e7eb;
+      --accent:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --primary:#38bdf8;
+      --chip:#1f2937;
+      --border:#1f2937;
+    }
+    :root.light {
+      --bg:#f9fafb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --text:#111827;
+      --accent:#16a34a;
+      --warn:#d97706;
+      --danger:#dc2626;
+      --primary:#0284c7;
+      --chip:#e5e7eb;
+      --border:#d1d5db;
+    }
+
+    header{position:sticky;top:0;backdrop-filter:blur(8px);background:var(--card);border-bottom:1px solid var(--border);z-index:20}
+    header .nav{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
+    header nav a{margin:0 8px;text-decoration:none;color:var(--text);font-weight:600}
+    header nav a:hover{color:var(--primary)}
+
+    .menu-btn{display:none;cursor:pointer;font-size:22px;background:none;border:0;color:var(--text)}
+    .side-menu{position:fixed;top:0;right:-260px;width:240px;height:100%;background:var(--card);box-shadow:-2px 0 10px rgba(0,0,0,.4);transition:.3s;padding:20px;z-index:25}
+    .side-menu.active{right:0}
+    .side-menu a{display:block;margin:14px 0;text-decoration:none;color:var(--text);font-weight:600}
+    .side-menu a:hover{color:var(--primary)}
+
+    .theme-toggle{cursor:pointer;border:0;background:var(--chip);color:var(--text);padding:6px 10px;border-radius:8px}
+
+    @media(max-width:768px){
+      header nav{display:none}
+      .menu-btn{display:block}
+    }
+
     .container{max-width:1100px;margin:auto;padding:18px}
     h1{margin:0 0 6px 0;font-weight:800;font-size:clamp(20px,3vw,28px)}
     .sub{color:var(--muted);font-size:14px}
     .grid{display:grid;gap:14px}
     .grid-2{grid-template-columns:1.2fr .8fr}
     @media(max-width:920px){.grid-2{grid-template-columns:1fr}}
-    .card{background:radial-gradient(1200px 300px at 100% -20%,rgba(56,189,248,.09),transparent 40%),
-                 radial-gradient(900px 300px at -10% -50%,rgba(34,197,94,.07),transparent 40%),
-                 var(--card);
-          border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:background .3s,color .3s}
+
     label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
-    input[type="text"],input[type="number"]{width:100%;padding:12px 12px;border:1px solid var(--border);border-radius:12px;background:#0b1220;color:var(--text);outline:none}
+    input[type="text"],input[type="number"]{width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);outline:none}
+    input[type="text"]:focus,input[type="number"]:focus{border-color:var(--primary)}
     input::placeholder{color:#6b7280}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .btn{cursor:pointer;border:0;border-radius:12px;padding:12px 14px;font-weight:700}
-    .btn-primary{background:var(--primary);color:#03111a}
-    .btn-ghost{background:#0b1220;border:1px solid var(--border);color:var(--text)}
-    .btn-danger{background:var(--danger)}
+
+    .btn{cursor:pointer;border:0;border-radius:12px;padding:12px 14px;font-weight:700;transition:all .2s}
+    .btn:disabled{opacity:0.5;cursor:not-allowed}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover:not(:disabled){background:#0369a1}
+    .btn-ghost{background:var(--bg);border:1px solid var(--border);color:var(--text)}
+    .btn-ghost:hover:not(:disabled){background:var(--chip)}
+    .btn-danger{background:var(--danger);color:#fff}
+    .btn-danger:hover:not(:disabled){background:#dc2626}
     .actions{display:flex;gap:8px;flex-wrap:wrap}
+
     .chips{display:flex;gap:8px;flex-wrap:wrap}
     .chip{background:var(--chip);border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+
     table{width:100%;border-collapse:separate;border-spacing:0 10px}
     thead th{font-size:12px;color:var(--muted);font-weight:600;text-align:right}
-    tbody td{background:#0b1220;border:1px solid var(--border);padding:12px;vertical-align:middle}
+    tbody td{background:var(--bg);border:1px solid var(--border);padding:12px;vertical-align:middle;transition:background .3s,color .3s}
     tbody tr td:first-child{border-radius:12px 0 0 12px}
     tbody tr td:last-child{border-radius:0 12px 12px 0}
+    tbody tr:hover td{background:var(--chip)}
+
     .badge{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;display:inline-block}
-    .buy{background:rgba(34,197,94,.15);color:#5df28e;border:1px solid rgba(34,197,94,.35)}
-    .hold{background:rgba(245,158,11,.15);color:#ffd37a;border:1px solid rgba(245,158,11,.35)}
-    .avoid{background:rgba(239,68,68,.15);color:#ff9b9b;border:1px solid rgba(239,68,68,.35)}
-    .risk-low{color:#5df28e}
-    .risk-med{color:#ffd37a}
-    .risk-high{color:#ff9b9b}
-    .muted{color:var(--muted)}
+    .buy{background:rgba(34,197,94,.15);color:#16a34a;border:1px solid rgba(34,197,94,.35)}
+    .hold{background:rgba(245,158,11,.15);color:#d97706;border:1px solid rgba(245,158,11,.35)}
+    .avoid{background:rgba(239,68,68,.15);color:#dc2626;border:1px solid rgba(239,68,68,.35)}
+
+    .risk-low{color:#16a34a}
+    .risk-med{color:#d97706}
+    .risk-high{color:#dc2626}
+
     .sep{height:1px;background:var(--border);margin:12px 0}
-    .footer{color:#7a889e;font-size:12px;margin-top:10px}
-    .kbd{border:1px solid var(--border);padding:2px 6px;border-radius:6px;background:#0b1220;color:#9fb3c8}
-    .danger-text{color:#ffb4b4}
-    .success-text{color:#a9ffcf}
+    .footer{color:var(--muted);font-size:12px;margin-top:20px;text-align:center;padding:20px;border-top:1px solid var(--border)}
+
+    .kbd{border:1px solid var(--border);padding:2px 6px;border-radius:6px;background:var(--bg);color:var(--muted);font-size:12px}
+
+    .empty-state{text-align:center;color:var(--muted);padding:40px 20px}
+
+    .loading{opacity:0.7;pointer-events:none}
+    
+    @media(max-width:600px){
+      .actions{flex-direction:column}
+      .row{grid-template-columns:1fr;gap:8px}
+      table{font-size:14px}
+      tbody td{padding:8px}
+    }
   </style>
 </head>
 <body>
+  <!-- ===== Header ===== -->
   <header>
-    <div class="container">
-      <h1>لوحة قرارات الاستثمار</h1>
-      <div class="sub">أدخل أسعار السهم/الصندوق (خلال ٥ سنوات، سنة، ٦ أشهر، والحالي) – هنحسب الزخم، العائد المركب، مستوى المخاطرة، ونقترح قرار <span class="kbd">شراء/احتفاظ/تجنب</span>.</div>
+    <div class="container nav">
+      <h1 style="font-size:20px;margin:0">ثاندر</h1>
+      <nav>
+        <a href="#">الرئيسية</a>
+        <a href="#">من نحن</a>
+        <a href="#">تواصل معنا</a>
+        <a href="#">ملفي</a>
+      </nav>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="theme-toggle" id="themeToggle" title="تبديل الوضع">🌙</button>
+        <button class="menu-btn" id="menuBtn" aria-label="فتح القائمة">☰</button>
+      </div>
     </div>
-  </header>  <main class="container grid grid-2" style="margin-top:14px">
+  </header>
+
+  <!-- ===== Side Menu ===== -->
+  <aside class="side-menu" id="sideMenu" aria-hidden="true">
+    <a href="#">الرئيسية</a>
+    <a href="#">من نحن</a>
+    <a href="#">تواصل معنا</a>
+    <a href="#">ملفي</a>
+  </aside>
+
+  <main class="container grid grid-2" style="margin-top:14px">
     <!-- Form Card -->
     <section class="card">
       <h2 style="margin:0 0 10px 0">إضافة أصل</h2>
       <div class="chips" style="margin-bottom:12px">
-        <span class="chip">مثال: فوري، إي إف جي، EFG Hermes، SPY، MSFT</span>
+        <span class="chip">مثال: فوري، إي إف جي، MSFT</span>
         <span class="chip">العملة غير مهمة – الأرقام فقط</span>
       </div>
-      <div class="row">
-        <div>
-          <label>اسم الشركة / الصندوق</label>
-          <input id="name" type="text" placeholder="مثال: MSFT أو فوري" />
+      <form id="assetForm">
+        <div class="row">
+          <div>
+            <label for="name">اسم الشركة / الصندوق</label>
+            <input id="name" type="text" placeholder="مثال: MSFT أو فوري" required />
+          </div>
+          <div>
+            <label for="p_now">سعر اليوم</label>
+            <input id="p_now" type="number" min="0" step="0.0001" placeholder="0.00" required />
+          </div>
         </div>
-        <div>
-          <label>سعر اليوم</label>
-          <input id="p_now" type="number" min="0" step="0.0001" placeholder="0.00" />
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label for="p_6m">سعر منذ ٦ أشهر</label>
+            <input id="p_6m" type="number" min="0" step="0.0001" placeholder="0.00" required />
+          </div>
+          <div>
+            <label for="p_1y">سعر منذ سنة</label>
+            <input id="p_1y" type="number" min="0" step="0.0001" placeholder="0.00" required />
+          </div>
         </div>
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label for="p_5y">سعر منذ ٥ سنوات</label>
+            <input id="p_5y" type="number" min="0" step="0.0001" placeholder="0.00" required />
+          </div>
+          <div>
+            <label for="notes">ملاحظات (اختياري)</label>
+            <input id="notes" type="text" placeholder="قطاع، سبب الاهتمام…" />
+          </div>
+        </div>
+        <div class="actions" style="margin-top:12px">
+          <button type="submit" class="btn btn-primary" id="addBtn">إضافة / تحديث</button>
+          <button type="button" class="btn btn-ghost" id="resetForm">تفريغ الحقول</button>
+        </div>
+      </form>
+      <div class="footer">تلميح: بعد الإضافة تقدر تعدل أو تحذف من الجدول. البيانات محفوظة في الجلسة الحالية.</div>
+    </section>
+
+    <!-- Insights Card -->
+    <section class="card">
+      <h2 style="margin:0 0 10px 0">منهجية القرار</h2>
+      <div class="chips">
+        <span class="chip">CAGR ٥ سنين</span>
+        <span class="chip">عائد سنة</span>
+        <span class="chip">عائد ٦ أشهر</span>
+        <span class="chip">درجة المخاطرة = تذبذب العوائد</span>
       </div>
-      <div class="row" style="margin-top:10px">
-        <div>
-          <label>سعر منذ ٦ أشهر</label>
-          <input id="p_6m" type="number" min="0" step="0.0001" placeholder="0.00" />
-        </div>
-        <div>
-          <label>سعر منذ سنة</label>
-          <input id="p_1y" type="number" min="0" step="0.0001" placeholder="0.00" />
-        </div>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <div>
-          <label>سعر منذ ٥ سنوات</label>
-          <input id="p_5y" type="number" min="0" step="0.0001" placeholder="0.00" />
-        </div>
-        <div>
-          <label>ملاحظات (اختياري)</label>
-          <input id="notes" type="text" placeholder="قطاع، سبب الاهتمام…" />
-        </div>
-      </div>
-      <div class="actions" style="margin-top:12px">
-        <button class="btn btn-primary" id="addBtn">إضافة / تحديث</button>
-        <button class="btn btn-ghost" id="resetForm">تفريغ الحقول</button>
-      </div>
-      <div class="footer">تلميح: بعد الإضافة تقدر تعدل أو تحذف من الجدول. بنحفظ تلقائيًا في <span class="kbd">localStorage</span>.</div>
-    </section><!-- Insights Card -->
-<section class="card">
-  <h2 style="margin:0 0 10px 0">منهجية القرار</h2>
-  <div class="chips">
-    <span class="chip">CAGR ٥ سنين</span>
-    <span class="chip">عائد سنة</span>
-    <span class="chip">عائد ٦ أشهر</span>
-    <span class="chip">درجة المخاطرة = تذبذب العوائد الثلاثة</span>
-  </div>
-  <div class="sep"></div>
-  <ul style="margin:0;padding-right:18px;line-height:1.9">
-    <li>نحسب <strong>CAGR خمس سنوات</strong> = <code>(سعر اليوم / سعر ٥ سنين)^(1/5) − 1</code>.</li>
-    <li>نحسب <strong>عائد سنة</strong> و<strong>عائد ٦ أشهر</strong>.</li>
-    <li>سكور الزخم = 20% من CAGR ٥ سنين + 30% من عائد سنة + 50% من عائد ٦ أشهر.</li>
-    <li>المخاطرة = الانحراف المعياري للعوائد الثلاثة (كل ما زاد → مخاطرة أعلى).</li>
-    <li>القرار:
-      <ul style="margin-top:6px;line-height:1.7">
-        <li><span class="badge buy">شراء</span> إذا كان سكور الزخم ≥ 10% وكل العوائد إيجابية.</li>
-        <li><span class="badge hold">احتفاظ</span> إذا كان 0% ≤ سكور الزخم &lt; 10% أو النتائج متباينة.</li>
-        <li><span class="badge avoid">تجنب / راقِب</span> إذا كان سكور الزخم سالبًا.</li>
+      <div class="sep"></div>
+      <ul style="margin:0;padding-right:18px;line-height:1.9">
+        <li>CAGR = <code>(سعر اليوم / سعر ٥ سنين)^(1/5) − 1</code></li>
+        <li>عائد سنة + عائد ٦ أشهر</li>
+        <li>سكور الزخم = 20% من CAGR + 30% من سنة + 50% من ٦ أشهر</li>
+        <li>المخاطرة = الانحراف المعياري للعوائد</li>
+        <li>القرار:
+          <ul style="margin-top:6px;line-height:1.7">
+            <li><span class="badge buy">شراء</span> إذا الزخم ≥ 10% وكل العوائد إيجابية</li>
+            <li><span class="badge hold">احتفاظ</span> إذا بين 0–10%</li>
+            <li><span class="badge avoid">تجنب</span> إذا الزخم سالب</li>
+          </ul>
+        </li>
       </ul>
-    </li>
-  </ul>
-  <div class="sep"></div>
-  <div class="muted">⚠️ تنبيه: هذه أداة مساعدة تعليمية وليست نصيحة استثمارية. اعتمد على أبحاثك، وتذكر تنويع المحفظة.</div>
-</section>
+      <div class="sep"></div>
+      <div style="color:var(--muted)">⚠️ تنبيه: هذه أداة تعليمية وليست نصيحة استثمارية. اعتمد على أبحاثك وتنويع المحفظة.</div>
+    </section>
 
-<!-- Table Card -->
-<section class="card" style="grid-column:1/-1">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
-    <h2 style="margin:0">قائمة الأصول</h2>
-    <div class="actions">
-      <button class="btn btn-ghost" id="exportBtn">تصدير JSON</button>
-      <button class="btn btn-ghost" id="importBtn">استيراد JSON</button>
-      <button class="btn btn-danger" id="wipeBtn">مسح الكل</button>
-    </div>
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th>الاسم</th>
-        <th>٦ أشهر</th>
-        <th>سنة</th>
-        <th>٥ سنين (CAGR)</th>
-        <th>سكور الزخم</th>
-        <th>المخاطرة</th>
-        <th>القرار</th>
-        <th>ملاحظات</th>
-        <th>إجراءات</th>
-      </tr>
-    </thead>
-    <tbody id="rows"></tbody>
-  </table>
-  <div class="footer">اختصار: دوبل كليك على الصف لبدء التعديل السريع.</div>
-</section>
+    <!-- Table Card -->
+    <section class="card" style="grid-column:1/-1">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+        <h2 style="margin:0">قائمة الأصول</h2>
+        <div class="actions">
+          <button class="btn btn-ghost" id="exportBtn">تصدير JSON</button>
+          <button class="btn btn-ghost" id="importBtn">استيراد JSON</button>
+          <button class="btn btn-danger" id="wipeBtn">مسح الكل</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>الاسم</th><th>٦ أشهر</th><th>سنة</th><th>٥ سنين (CAGR)</th>
+              <th>الزخم</th><th>المخاطرة</th><th>القرار</th><th>ملاحظات</th><th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div id="emptyState" class="empty-state" style="display:none">
+        <p>لا توجد أصول مضافة بعد</p>
+        <p>ابدأ بإضافة أول أصل من النموذج أعلاه</p>
+      </div>
+      <div class="footer">اختصار: دوبل كليك على الصف لبدء التعديل السريع.</div>
+    </section>
+  </main>
 
-  </main>  <template id="row-template">
+  <template id="row-template">
     <tr>
-      <td class="nm"></td>
-      <td class="r6"></td>
-      <td class="r1"></td>
-      <td class="r5"></td>
-      <td class="mom"></td>
-      <td class="risk"></td>
-      <td class="rec"></td>
-      <td class="nt"></td>
-      <td class="ops"></td>
+      <td class="nm"></td><td class="r6"></td><td class="r1"></td>
+      <td class="r5"></td><td class="mom"></td><td class="risk"></td>
+      <td class="rec"></td><td class="nt"></td><td class="ops"></td>
     </tr>
-  </template>  <script>
-    // ===== Utilities =====
-    const $ = (q, el=document) => el.querySelector(q);
-    const fmtPct = (x) => (isFinite(x)? (x*100).toFixed(1) : "-") + "%";
+  </template>
 
+  <footer class="footer">© 2025 ثاندر – جميع الحقوق محفوظة</footer>
+
+  <script>
+    // ================= Utilities =================
+    const $ = (q, el=document) => el.querySelector(q);
+    const fmtPct = (x) => (isFinite(x) && x !== null ? (x*100).toFixed(1) : "-") + "%";
+
+    function safeUUID(){
+      if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return 'id-' + Date.now().toString(36) + '-' + Math.floor(Math.random()*1e6).toString(36);
+    }
+
+    // ================= Metrics =================
     function calcMetrics(p5y, p1y, p6m, pnow){
+      // التحقق من صحة البيانات
+      const values = [p5y, p1y, p6m, pnow];
+      if(values.some(v => !isFinite(v) || v <= 0)) {
+        return { r6m: 0, r1y: 0, cagr5: 0, momentum: 0, risk: 0, riskLevel: 'غير محدد', decision: 'hold' };
+      }
+
       const r6m = (pnow / p6m) - 1;
       const r1y = (pnow / p1y) - 1;
       const cagr5 = Math.pow(pnow / p5y, 1/5) - 1;
       const momentum = 0.2*cagr5 + 0.3*r1y + 0.5*r6m;
-      // risk proxy = stddev of [r6m, r1y, cagr5]
+      
       const arr = [r6m, r1y, cagr5];
-      const mean = (arr[0]+arr[1]+arr[2])/3;
-      const variance = (arr.reduce((s,v)=>s+Math.pow(v-mean,2),0))/3;
+      const mean = arr.reduce((a,b)=>a+b,0)/3;
+      const variance = arr.reduce((s,v)=>s+Math.pow(v-mean,2),0)/3;
       const risk = Math.sqrt(variance);
-      // decision
+      
       let decision = 'hold';
       if(momentum >= 0.10 && r6m>0 && r1y>0 && cagr5>0) decision = 'buy';
       else if(momentum < 0) decision = 'avoid';
-      // risk level
+      
       let riskLevel = 'منخفض';
       if(risk >= 0.25) riskLevel = 'عالي';
       else if(risk >= 0.12) riskLevel = 'متوسط';
+      
       return { r6m, r1y, cagr5, momentum, risk, riskLevel, decision };
     }
 
@@ -215,37 +301,92 @@
       return 'risk-low';
     }
 
-    // ===== State (localStorage) =====
+    // ================= State (in-memory storage) =================
     const KEY = 'invest-dashboard-v1';
-    let state = JSON.parse(localStorage.getItem(KEY) || '[]');
-    let editingId = null; // when editing from the form
+    let state = [];
+    let editingId = null;
+    let currentTheme = 'dark';
 
-    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+    // محاكي localStorage للبيئات التي لا تدعمه
+    const storage = {
+      data: {},
+      getItem(key) {
+        return this.data[key] || null;
+      },
+      setItem(key, value) {
+        this.data[key] = value;
+      },
+      removeItem(key) {
+        delete this.data[key];
+      }
+    };
+
+    // استخدام localStorage إذا كان متاحاً، وإلا استخدام المحاكي
+    const store = (typeof localStorage !== 'undefined' && localStorage !== null) ? localStorage : storage;
+
+    function loadState(){
+      try {
+        const saved = store.getItem(KEY);
+        state = saved ? JSON.parse(saved) : [];
+        // التحقق من صحة البيانات المحفوظة
+        state = state.filter(item => 
+          item && item.id && item.name && 
+          isFinite(item.pnow) && item.pnow > 0 &&
+          isFinite(item.p6m) && item.p6m > 0 &&
+          isFinite(item.p1y) && item.p1y > 0 &&
+          isFinite(item.p5y) && item.p5y > 0
+        );
+      } catch(e) {
+        console.warn('تحميل البيانات من الذاكرة المؤقتة');
+        state = [];
+      }
+    }
+
+    function save(){ 
+      try {
+        store.setItem(KEY, JSON.stringify(state)); 
+      } catch(e) {
+        console.warn('حفظ البيانات في الذاكرة المؤقتة');
+      }
+    }
 
     function upsert(item){
       const idx = state.findIndex(x => x.id === item.id);
-      if(idx>-1) state[idx] = item; else state.push(item);
-      save();
+      if(idx > -1) state[idx] = item; 
+      else state.push(item);
+      save(); 
       render();
     }
 
     function remove(id){
-      state = state.filter(x => x.id!==id);
-      save();
+      state = state.filter(x => x.id !== id);
+      save(); 
       render();
     }
 
-    // ===== Render Table =====
+    // ================= Render =================
     function render(){
       const tbody = $('#rows');
+      const emptyState = $('#emptyState');
+      
+      if(state.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      emptyState.style.display = 'none';
       tbody.innerHTML = '';
+      
       state.forEach(row => {
         const t = document.importNode($('#row-template').content, true);
         const cells = {
           nm: $('.nm', t), r6: $('.r6', t), r1: $('.r1', t), r5: $('.r5', t),
           mom: $('.mom', t), risk: $('.risk', t), rec: $('.rec', t), nt: $('.nt', t), ops: $('.ops', t)
         };
+        
         const m = calcMetrics(row.p5y, row.p1y, row.p6m, row.pnow);
+        
         cells.nm.textContent = row.name;
         cells.r6.textContent = fmtPct(m.r6m);
         cells.r1.textContent = fmtPct(m.r1y);
@@ -254,42 +395,46 @@
         cells.risk.innerHTML = `<span class="${riskColor(m.riskLevel)}">${m.riskLevel}</span>`;
         cells.rec.innerHTML = badgeDecision(m.decision);
         cells.nt.textContent = row.notes || '';
+
         // actions
         const editBtn = document.createElement('button');
-        editBtn.className = 'btn btn-ghost';
+        editBtn.className = 'btn btn-ghost'; 
         editBtn.textContent = 'تعديل';
-        editBtn.onclick = () => startEdit(row.id);
+        editBtn.onclick = (e) => { e.stopPropagation(); startEdit(row.id); };
 
         const delBtn = document.createElement('button');
-        delBtn.className = 'btn btn-danger';
+        delBtn.className = 'btn btn-danger'; 
         delBtn.textContent = 'حذف';
-        delBtn.onclick = () => {
-          if(confirm('هل أنت متأكد من حذف هذا الأصل؟')) remove(row.id);
+        delBtn.onclick = (e) => { 
+          e.stopPropagation(); 
+          if(confirm('هل أنت متأكد من حذف هذا الأصل؟')) remove(row.id); 
         };
-        cells.ops.append(editBtn, delBtn);
+
+        cells.ops.style.whiteSpace = 'nowrap';
+        cells.ops.append(editBtn, ' ', delBtn);
 
         // double-click to quick-edit
-        t.querySelector('tr').ondblclick = () => startEdit(row.id);
+        const tr = t.querySelector('tr');
+        tr.ondblclick = () => startEdit(row.id);
+        tr.style.cursor = 'pointer';
+        tr.title = 'دوبل كليك للتعديل';
 
         tbody.appendChild(t);
       });
     }
 
-    // ===== Form Handling =====
+    // ================= Form =================
     function resetForm(){
       editingId = null;
-      $('#name').value = '';
-      $('#p_now').value = '';
-      $('#p_6m').value = '';
-      $('#p_1y').value = '';
-      $('#p_5y').value = '';
-      $('#notes').value = '';
+      const form = $('#assetForm');
+      form.reset();
       $('#addBtn').textContent = 'إضافة / تحديث';
     }
 
     function startEdit(id){
-      const row = state.find(x=>x.id===id);
+      const row = state.find(x => x.id === id);
       if(!row) return;
+      
       editingId = id;
       $('#name').value = row.name;
       $('#p_now').value = row.pnow;
@@ -298,10 +443,17 @@
       $('#p_5y').value = row.p5y;
       $('#notes').value = row.notes || '';
       $('#addBtn').textContent = 'تحديث';
-      window.scrollTo({top:0,behavior:'smooth'});
+      
+      // التمرير إلى أعلى الصفحة
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function onSubmit(){
+    function onSubmit(e){
+      e.preventDefault();
+      
+      const form = e.target;
+      const formData = new FormData(form);
+      
       const name = $('#name').value.trim();
       const pnow = parseFloat($('#p_now').value);
       const p6m = parseFloat($('#p_6m').value);
@@ -309,27 +461,66 @@
       const p5y = parseFloat($('#p_5y').value);
       const notes = $('#notes').value.trim();
 
-      if(!name){ alert('من فضلك أدخل الاسم'); return; }
-      const fields = [pnow,p6m,p1y,p5y];
-      if(fields.some(x=>!isFinite(x) || x<=0)){
+      if(!name){ 
+        alert('من فضلك أدخل اسم الشركة أو الصندوق'); 
+        $('#name').focus();
+        return; 
+      }
+      
+      const fields = [pnow, p6m, p1y, p5y];
+      if(fields.some(x => !isFinite(x) || x <= 0)){
         alert('تأكد من إدخال أسعار صحيحة أكبر من صفر لجميع الفترات');
         return;
       }
 
-      const item = { id: editingId || crypto.randomUUID(), name, pnow, p6m, p1y, p5y, notes, ts: Date.now() };
+      // التحقق من منطقية الأسعار
+      if(p5y > pnow * 100) {
+        if(!confirm('السعر من ٥ سنوات يبدو عالياً جداً مقارنة بسعر اليوم. هل أنت متأكد؟')) return;
+      }
+
+      const item = {
+        id: editingId || safeUUID(),
+        name,
+        pnow: Number(pnow.toFixed(4)),
+        p6m: Number(p6m.toFixed(4)),
+        p1y: Number(p1y.toFixed(4)),
+        p5y: Number(p5y.toFixed(4)),
+        notes,
+        ts: Date.now()
+      };
+      
       upsert(item);
       resetForm();
     }
 
-    // ===== Import/Export =====
+    // ================= Import / Export / Wipe =================
     function exportJSON(){
-      const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'invest-dashboard.json';
-      a.click();
-      URL.revokeObjectURL(a.href);
+      if(state.length === 0) {
+        alert('لا توجد بيانات للتصدير');
+        return;
+      }
+      
+      try {
+        const dataWithMetadata = {
+          version: '1.0',
+          exported_at: new Date().toISOString(),
+          data: state
+        };
+        
+        const blob = new Blob([JSON.stringify(dataWithMetadata, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `invest-dashboard-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      } catch(e) {
+        console.error('خطأ في التصدير:', e);
+        alert('حدث خطأ أثناء تصدير البيانات');
+      }
     }
+
     function importJSON(){
       const inp = document.createElement('input');
       inp.type = 'file';
@@ -337,17 +528,55 @@
       inp.onchange = () => {
         const file = inp.files[0];
         if(!file) return;
+        
         const reader = new FileReader();
         reader.onload = () => {
           try{
-            const data = JSON.parse(reader.result);
-            if(!Array.isArray(data)) throw new Error('bad');
-            // minimal schema check
-            state = data.filter(x=>x && x.id && x.name && isFinite(x.pnow) && isFinite(x.p6m) && isFinite(x.p1y) && isFinite(x.p5y));
+            const imported = JSON.parse(reader.result);
+            let data;
+            
+            // دعم التنسيقات المختلفة
+            if(imported.data && Array.isArray(imported.data)) {
+              data = imported.data; // التنسيق الجديد
+            } else if(Array.isArray(imported)) {
+              data = imported; // التنسيق القديم
+            } else {
+              throw new Error('تنسيق غير مدعوم');
+            }
+            
+            // التحقق من صحة البيانات
+            const validData = data.filter(x => 
+              x && x.id && x.name && 
+              isFinite(x.pnow) && x.pnow > 0 &&
+              isFinite(x.p6m) && x.p6m > 0 &&
+              isFinite(x.p1y) && x.p1y > 0 &&
+              isFinite(x.p5y) && x.p5y > 0
+            );
+            
+            if(validData.length === 0) {
+              alert('الملف لا يحتوي على بيانات صالحة');
+              return;
+            }
+            
+            const shouldReplace = confirm(`تم العثور على ${validData.length} عنصر صالح. هل تريد استبدال البيانات الحالية؟`);
+            
+            if(shouldReplace) {
+              state = validData;
+            } else {
+              // دمج البيانات
+              validData.forEach(item => {
+                item.id = safeUUID(); // إعطاء معرف جديد لتجنب التداخل
+                state.push(item);
+              });
+            }
+            
             save();
             render();
-            alert('تم الاستيراد بنجاح');
-          }catch(e){ alert('ملف غير صالح'); }
+            alert(`تم الاستيراد بنجاح: ${validData.length} عنصر`);
+          } catch(e) {
+            console.error('خطأ في الاستيراد:', e);
+            alert('خطأ في قراءة الملف. تأكد من أنه ملف JSON صالح');
+          }
         };
         reader.readAsText(file);
       };
@@ -355,30 +584,239 @@
     }
 
     function wipeAll(){
-      if(confirm('هيتم مسح كل البيانات من هذا الجهاز فقط. متأكد؟')){
+      if(confirm('سيتم مسح جميع البيانات نهائياً من هذا الجهاز. هل أنت متأكد؟')){
         state = [];
         save();
         render();
+        resetForm();
+        alert('تم مسح جميع البيانات بنجاح');
       }
     }
 
-    // ===== Setup =====
-    $('#addBtn').onclick = onSubmit;
-    $('#resetForm').onclick = resetForm;
-    $('#exportBtn').onclick = exportJSON;
-    $('#importBtn').onclick = importJSON;
-    $('#wipeBtn').onclick = wipeAll;
+    // ================= Theme & Side Menu =================
+    let themeToggle, menuBtn, sideMenu;
 
-    // Prefill demo once for empty states
-    if(state.length===0){
-      const demo = [
-        {name:'MSFT', p5y:135, p1y:410, p6m:440, pnow:450, notes:'تقنية كبرى'},
-        {name:'SPY', p5y:290, p1y:500, p6m:520, pnow:530, notes:'صندوق S&P 500'},
-        {name:'فوري', p5y:15,  p1y:6,   p6m:7.5, pnow:7.2, notes:'Fintech مصر'}
-      ];
-      demo.forEach(d=> upsert({ id: crypto.randomUUID(), ...d, ts: Date.now() }));
-    } else {
-      render();
+    function applyTheme(theme){
+      currentTheme = theme;
+      if(theme === 'light') {
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.classList.remove('light');
+      }
+      
+      // تحديث أيقونة الزر إذا كان موجوداً
+      const toggle = $('#themeToggle');
+      if(toggle) {
+        toggle.textContent = (theme === 'light') ? '☀️' : '🌙';
+      }
+      
+      try {
+        store.setItem('theme', theme);
+      } catch(e) {
+        console.warn('حفظ إعدادات المظهر في الذاكرة المؤقتة');
+      }
     }
-  </script></body>
+
+    // تحميل إعدادات المظهر
+    function initTheme(){
+      try {
+        const saved = store.getItem('theme');
+        if(saved) {
+          applyTheme(saved);
+        } else {
+          // الكشف التلقائي عن تفضيلات النظام
+          const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+          applyTheme(prefersLight ? 'light' : 'dark');
+        }
+      } catch(e) {
+        console.warn('استخدام المظهر الافتراضي');
+        applyTheme('dark'); // افتراضي
+      }
+    }
+
+    // ================= Event Listeners =================
+    function initEventListeners(){
+      // تحديد العناصر هنا بعد التأكد من تحميل DOM
+      themeToggle = $('#themeToggle');
+      menuBtn = $('#menuBtn');
+      sideMenu = $('#sideMenu');
+
+      // التحقق من وجود العناصر قبل إضافة المستمعين
+      if(!themeToggle || !menuBtn || !sideMenu) {
+        console.error('لم يتم العثور على عناصر القائمة أو زر المظهر');
+        return;
+      }
+
+      // Theme toggle
+      themeToggle.onclick = () => {
+        const newTheme = (currentTheme === 'light') ? 'dark' : 'light';
+        applyTheme(newTheme);
+      };
+
+      // Side menu toggle
+      menuBtn.onclick = () => {
+        const isActive = sideMenu.classList.toggle('active');
+        sideMenu.setAttribute('aria-hidden', !isActive);
+      };
+
+      // Close side menu on link click
+      sideMenu.querySelectorAll('a').forEach(a => {
+        a.onclick = () => {
+          sideMenu.classList.remove('active');
+          sideMenu.setAttribute('aria-hidden', 'true');
+        };
+      });
+
+      // Close side menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if(sideMenu && !sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+          sideMenu.classList.remove('active');
+          sideMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      // Form submission
+      const form = $('#assetForm');
+      if(form) {
+        form.addEventListener('submit', onSubmit);
+      }
+      
+      const resetBtn = $('#resetForm');
+      if(resetBtn) {
+        resetBtn.onclick = resetForm;
+      }
+
+      // Import/Export/Wipe
+      const exportBtn = $('#exportBtn');
+      const importBtn = $('#importBtn');
+      const wipeBtn = $('#wipeBtn');
+      
+      if(exportBtn) exportBtn.onclick = exportJSON;
+      if(importBtn) importBtn.onclick = importJSON;
+      if(wipeBtn) wipeBtn.onclick = wipeAll;
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        // ESC لإلغاء التعديل
+        if(e.key === 'Escape' && editingId) {
+          resetForm();
+        }
+        
+        // Ctrl+S للحفظ السريع (منع الحفظ الافتراضي للمتصفح)
+        if(e.ctrlKey && e.key === 's') {
+          e.preventDefault();
+          const nameInput = $('#name');
+          if(nameInput && nameInput.value.trim()) {
+            const form = $('#assetForm');
+            if(form) form.dispatchEvent(new Event('submit'));
+          }
+        }
+      });
+
+      // تحسين تجربة المستخدم للنماذج
+      const inputs = ['name','p_now','p_6m','p_1y','p_5y','notes'];
+      inputs.forEach(id => {
+        const el = $('#'+id);
+        if(!el) return;
+        
+        // التنقل بين الحقول بـ Enter
+        el.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            const currentIndex = inputs.indexOf(id);
+            const nextIndex = currentIndex + 1;
+            
+            if(nextIndex < inputs.length) {
+              const nextEl = $('#'+inputs[nextIndex]);
+              if(nextEl) nextEl.focus();
+            } else {
+              // إذا كان آخر حقل، أرسل النموذج
+              const form = $('#assetForm');
+              if(form) form.dispatchEvent(new Event('submit'));
+            }
+          }
+        });
+
+        // تنسيق الأرقام أثناء الكتابة
+        if(el.type === 'number') {
+          el.addEventListener('blur', () => {
+            const value = parseFloat(el.value);
+            if(isFinite(value) && value > 0) {
+              el.value = value.toFixed(4).replace(/\.?0+$/, '');
+            }
+          });
+        }
+      });
+    }
+
+    // ================= Initialization =================
+    function init(){
+      loadState();
+      initTheme();
+      initEventListeners();
+
+      // إضافة بيانات تجريبية إذا لم توجد بيانات
+      if(state.length === 0){
+        const demo = [
+          { name: 'MSFT', p5y: 135, p1y: 410, p6m: 440, pnow: 450, notes: 'تقنية كبرى - مايكروسوفت' },
+          { name: 'SPY',  p5y: 290, p1y: 500, p6m: 520, pnow: 530, notes: 'صندوق S&P 500' },
+          { name: 'فوري',  p5y: 15,  p1y: 6,   p6m: 7.5, pnow: 7.2, notes: 'Fintech مصر' }
+        ];
+        demo.forEach(d => {
+          const item = { 
+            id: safeUUID(), 
+            ...d, 
+            ts: Date.now() 
+          };
+          state.push(item);
+        });
+        save();
+      }
+      
+      render();
+
+      // إظهار رسالة ترحيب للمستخدمين الجدد
+      setTimeout(() => {
+        const hasSeenWelcome = store.getItem('hasSeenWelcome');
+        if(!hasSeenWelcome && state.length <= 3) {
+          const showWelcome = confirm('مرحباً بك في لوحة قرارات الاستثمار!\n\nتم إضافة بعض الأمثلة التوضيحية. هل تريد الاحتفاظ بها أم حذفها والبدء من جديد؟\n\nموافق = الاحتفاظ بالأمثلة\nإلغاء = حذف الأمثلة والبدء من جديد');
+          
+          if(!showWelcome) {
+            state = [];
+            save();
+            render();
+          }
+          
+          store.setItem('hasSeenWelcome', 'true');
+        }
+      }, 1000);
+    }
+
+    // تشغيل التطبيق عند تحميل الصفحة
+    if(document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    // تصدير بعض الدوال للتطوير والتشخيص
+    window.investmentDashboard = {
+      state,
+      calcMetrics,
+      exportData: () => JSON.stringify(state, null, 2),
+      importData: (data) => {
+        try {
+          state = JSON.parse(data);
+          save();
+          render();
+          return true;
+        } catch(e) {
+          console.error(e);
+          return false;
+        }
+      },
+      version: '1.1.0'
+    };
+  </script>
+</body>
 </html>
